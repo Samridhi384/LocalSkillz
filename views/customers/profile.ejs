@@ -1,0 +1,17 @@
+<%- include('../includes/head.ejs') %> <% if(user.role === 'user') { %> <%-
+include('../includes/user.ejs') %> <% } else { %> <%-
+include('../includes/serviceNavbar.ejs') %> <% } %>
+<main class="centered">
+  <h1>Greetings, <%= user.name %></h1>
+  <div>
+    <h3>Email: <%= user.email %></h3>
+    <h3>Role: <%= user.role %></h3>
+  </div>
+  <div class="card__actions">
+    <a href="/update/<%= user.id %>" class="btn">Edit the Profile</a>
+  </div>
+  <div class="card__actions">
+    <a href="/deleteUser" class="leave" id="leave-chat">Delete the Account</a>
+  </div>
+</main>
+<%- include('../includes/end.ejs') %>

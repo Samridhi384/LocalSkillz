@@ -1,0 +1,45 @@
+<%- include('../includes/head.ejs') %> <%- include('../includes/user.ejs') %>
+
+<link rel="stylesheet" href="/css/forms.css">
+<link rel="stylesheet" href="/css/rating.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+
+</head>
+
+<body>
+  <div class="back__link">
+    <a href='/getFinishedBookings' class="btn">Back</a>
+  </div>
+  <main class="centered">
+    <div class="form-container">
+      <h1>Ratings & Reviews</h1>
+      <form class="product-form" action="/createRating" method="POST">
+          <h5 style="color: burlywood;">
+            Rate the <%= service.service %> Service by <strong> <%= serviceProvider.name %></strong>
+          </h5>
+          <div class="wrapper"> 
+  <div class="rate-box">
+    <input type="radio" name="ratings" id="1" value="1"/>
+    <label class="star" for="1"></label>
+    <input type="radio" name="ratings" id="2" value="2"/>
+    <label class="star" for="2"></label>
+    <input type="radio" name="ratings" id="3"  value="3"/>
+    <label class="star" for="3"></label>
+    <input type="radio" name="ratings" id="4" value="4"/>
+    <label class="star" for="4"></label>
+    <input type="radio" name="ratings" id="5" value="5"/>
+    <label class="star" for="5"></label>
+  </div>
+  <textarea cols="30" rows="6" placeholder="Tell us about your experience!" name="reviews" id="reviews"></textarea>
+</div>
+    <button class="submit-btn" type="submit">Submit FeedBack</button>
+        <input type="hidden" value="<%= booking.id %>" name="bookId">
+        <input type="hidden" value="<%= serviceProvider.id %>" name="serviceProvideId">
+        <input type="hidden" value="<%= booking.customerId %>" name="serviceUserId">
+        <input type="hidden" value="<%= service.id %>" name="serviceDoneId">
+      </form>
+    </div>
+  </main>
+
+<%- include('../includes/end.ejs') %>

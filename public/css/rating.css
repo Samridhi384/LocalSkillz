@@ -1,0 +1,111 @@
+.form-container {
+    max-width: 600px;
+    margin: 50px auto;
+    background: #404248;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .form-container h2, .form-container h3 {
+    color: #fff;
+  }
+
+  .form-container .form-check-label {
+    color: #fff;
+  }
+
+  .form-container .card__actions.button {
+    width: 100%;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+  }
+
+  .form-container .card__actions.button:hover {
+    background-color: #0056b3;
+  }
+
+  .wrapper {
+  width: 20rem;
+  padding: 0.3rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  border-radius: 0.25rem;
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2);
+  background-color: rgba(255, 255, 255, 0.5);
+  z-index: 1;
+}
+
+  .rate-box {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 0.1rem;
+}
+.rate-box input {
+  display: none;
+}
+.rate-box input:hover ~ .star:before {
+  color: rgba(255, 204, 51, 0.5);
+}
+.rate-box input:active + .star:before {
+  transform: scale(0.9);
+}
+.rate-box input:checked ~ .star:before {
+  color: #ffcc33;
+  text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3), -3px -3px 8px rgba(255, 255, 255, 0.8);
+}
+.rate-box .star:before {
+  content: "★";
+  display: inline-block;
+  font-family: "Potta One", cursive;
+  font-size: 4rem;
+  cursor: pointer;
+  color: #0000;
+  text-shadow: 2px 2px 3px rgba(255, 255, 255, 0.5);
+  background-color: #aaa;
+  background-clip: text;
+  -webkit-background-clip: text;
+  transition: all 0.3s;
+}
+
+textarea {
+  border: none;
+  resize: none;
+  width: 100%;
+  padding: 0.2rem;
+  color: inherit;
+  font-family: inherit;
+  line-height: 1.5;
+  border-radius: 0.2rem;
+  box-shadow: inset 2px 2px 8px rgba(0, 0, 0, 0.3), inset -2px -2px 8px rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.3);
+}
+textarea::placeholder {
+  color: #aaa;
+  font-size: medium;
+  color: black;
+}
+textarea:focus {
+  outline-color: #ffcc33;
+}
+
+.submit-btn {
+  padding: 0.2rem 0.5rem;
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3), -3px -3px 8px rgba(255, 255, 255, 0.8);
+  border-radius: 1rem;
+  cursor: pointer;
+  background-color: rgba(255, 204, 51, 0.8);
+  margin-top: 15px;
+  transition: all 0.2s;
+}
+.submit-btn:active {
+  transform: translate(2px, 2px);
+}

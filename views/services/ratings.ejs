@@ -1,0 +1,46 @@
+  <%- include('../includes/head.ejs') %>
+  </head>
+  
+  <body>
+    <%- include('../includes/serviceNavbar.ejs') %>
+    <main>
+  <% if (ratings.length > 0) { %>
+  <div class="grid">
+    <% for(let rating of ratings) { %>
+    <article class="card product-item" style="width: 275px;">
+      <div class="card__header">
+        <h5 class="product__title" style="color: antiquewhite; text-align: center; margin-bottom: -20px !important;"><%= rating.service %></h5>
+      </div>
+      <hr style="color: antiquewhite;">
+      <!-- <div class="card__content"> -->
+        <h6 class="product__author" style="color: bisque; text-align: right;"><strong style="margin-right: 120px !important;"><%= rating.customer %></strong>  <%= formatDate(rating.createdDate) %></h6>
+        <% function formatDate(dateString) { const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, '0'); const month =
+        String(date.getMonth() + 1).padStart(2, '0'); const year =
+        date.getFullYear(); return `${day}/${month}/${year}`; } %>
+        
+      <!-- </div> -->
+      <!-- <div class="card__content"> -->
+        <% let stars = ''; %>
+        <% for(let i = 0; i < rating.rating; i++) { %>
+          <% stars += '⭐'; %>
+        <% } %>
+
+        <h6 class="product__author" style="color: burlywood !important; text-align: center;">
+          Rating: <%= stars %>
+        </h6>
+
+        <h6 class="product__author" style="color: burlywood !important; text-align: center;">
+          Review: <%= rating.review %>
+        </h6>
+      <!-- </div> -->
+    </article>
+    <% } %>
+  </div>
+  <% } else { %>
+  <h1>No Ratings Found</h1>
+  <% } %>
+</main>
+    
+                    
+ <%- include('../includes/end.ejs') %>

@@ -1,0 +1,116 @@
+<%- include('../includes/head.ejs') %>
+   <%- include('../includes/user.ejs') %>
+   <main>
+    <div class="container">
+        <div class="content">
+            <h1>Home Services at your <br> doorstep</h1>
+            <p>
+            <div class="main-block">
+              <h4>What are you looking for?</h4>
+              <div class="block-container">
+                
+          <div class="block" data-category="Electrician">
+              <img src="https://img.icons8.com/?size=80&id=OvYyfxleOBKq&format=png" alt="Electrician">
+              <p>Electrician</p>
+          </div>
+          <div class="block" data-category="Plumber">
+              <img src="https://img.icons8.com/?size=80&id=e0lg1cVldtzN&format=png" alt="Plumber">
+              <p>Plumber</p>
+          </div>
+          <div class="block" data-category="Carpenter">
+              <img src="https://img.icons8.com/?size=80&id=ptyKKc0li7Px&format=png" alt="Carpenter">
+              <p>Carpenter</p>
+          </div>
+          <div class="block" data-category="Cleaning">
+              <img src="https://img.icons8.com/?size=80&id=EtSx5eGVIR2y&format=png" alt="Cleaning">
+              <p>Cleaning</p>
+          </div>
+          <div class="block" data-category="AC_Appliance_Repair">
+              <img src="https://img.icons8.com/?size=80&id=rcvmSKzkbMQV&format=png" alt="AC & Appliance Repair">
+              <p>AC & Appliance Repair</p>
+          </div>
+          <div class="block" data-category="Packers_Movers">
+              <img src="https://img.icons8.com/?size=80&id=Msi43iJ4vsUL&format=png" alt="Packers & Movers">
+              <p>Packers & Movers</p>
+          </div>
+         
+      </div>
+            </div>
+        </div>
+        <div class="image-container">
+            <img src="/img/bg.jpeg" alt="All Services">
+        </div>
+    </div>
+    <!-- Modal -->
+        <div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="categoryModalLabel"></div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="categoryModalBody">
+                <!-- Category details will be displayed here -->
+            </div>
+            </div>
+        </div>
+        </div>
+  </main>
+
+    
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const categoryBlocks = document.querySelectorAll(".block");
+
+    categoryBlocks.forEach(function(block) {
+      block.addEventListener("click", function() {
+        const category = block.getAttribute("data-category");
+
+        // Fetch service details based on category
+        fetch(`/services/${category}`)
+          .then(response => response.json())
+          .then(data => {
+            const modalHeader = document.getElementById("categoryModalLabel")
+            const modalBody = document.getElementById("categoryModalBody");
+            console.log(data);
+            modalHeader.innerHTML = ` <h5>${category}</h5>`
+            if(data.length !== 0) 
+            {
+                modalBody.innerHTML = `
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    ${data.map(service => `
+                    <div class="col">
+                        <div class="card h-100 d-flex flex-column justify-content-center align-items-center">
+                    <a href="/getServiceById/${service.id}" class="btn">
+                        <div class="icon">
+                            <img src="${service.image_url}" class="card-img-top" alt="${service.service}">
+                        </div>
+                        <div class="card-body text-center">
+                            <h6 class="card-title">${service.service}</h6>
+                        </div>
+                        </a>
+                        </div>
+                    </div>
+                    `).join('')}
+                </div>
+                `;
+            }
+            else {
+                modalBody.innerHTML = `<h6>No services available</h6>`
+            }
+
+            var modal = new bootstrap.Modal(document.getElementById('categoryModal'), {
+              keyboard: false
+            });
+            modal.show();
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      });
+    });
+  });
+ </script>
+
+  </body>
+</html> 

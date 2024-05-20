@@ -1,0 +1,68 @@
+<%- include('../includes/head.ejs') %>
+<link rel="stylesheet" href="/css/service.css" />
+<link rel="stylesheet" href="/css/product.css" />
+
+</head>
+
+<body>
+  <%- include('../includes/serviceNavbar.ejs') %>
+  <main>
+    <% if (services.length > 0) { %>
+      <div class="grid">
+        <% services.forEach(service => { %>
+          <% const booking = service.booking; %>
+          <article class="card product-item">
+            <header class="card__header">
+              <h1 class="product__title"><%= service.service.service %></h1>
+            </header>
+            <div class="card__image">
+              <img src="<%= service.service.image_url %>" alt="<%= service.service.service %>" />
+            </div>
+            <div class="card__content">
+              <% function formatDate(dateString) { 
+                const date = new Date(dateString);
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const year = date.getFullYear();
+                return `${day}/${month}/${year}`; 
+              } %>
+              <h6 class="product__author">
+                <b>Scheduled on:</b> <%= formatDate(booking.date) %> at <%= booking.time %>
+              </h6>
+              <h6 class="product__author"><b>Amount Received:</b> ₹<%= booking.amount - 69 %></h6>    
+            </div>
+            <div class="card__content">
+              <h6 class="product__author" style="color: burlywood !important">
+                Customer Name: <%= service.customer.name %>
+              </h6>
+              <h6 class="product__author" style="color: burlywood !important">
+                <div class="contact-details">
+                  <img class="mail" src="https://img.icons8.com/?size=60&id=aRZo6233P8ZV&format=png" alt="Contact Details" />
+                  <h6 style="margin-top: -35px; margin-left: 10px;"><%= service.customer.email %></h6>
+                </div>
+              </h6>
+              <div class="card__actions">
+                <a href="/getStatusChange/<%= booking.id %>" class="btn" style="background-color: azure; font-weight: bold">
+                  Updated Booking Status: <%= booking.status %>
+                </a>
+              </div>
+            </div>
+            <% if (booking.status === "Approved" || booking.status === "Confirmed" || booking.status === "Started") { %>
+              <div class="card__actions">
+                <a href="/update/<%= user.id %>" class="btn">Chat with <%= service.customer.name %></a>
+              </div>
+            <% } %>
+            <% if (booking.status === "Confirmed") { %>
+              <div class="card__actions">
+                <a href="/edit-booking/<%= booking.id %>" class="btn">Reschedule the Booking</a>
+              </div>
+            <% } %>
+          </article>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <h1>No Services Found</h1>
+    <% } %>
+  </main>
+
+  <%- include('../includes/end.ejs') %>

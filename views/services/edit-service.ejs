@@ -1,0 +1,87 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/forms.css">
+     <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+        .form-check-inline{
+            margin-left: 40px !important;
+        }
+    </style>
+</head>
+
+<body>
+   <%- include('../includes/serviceNavbar.ejs') %>
+     <div class="back__link">
+        <% if(editing) { %><a href='/getUserServices' class="btn">Back</a><% } else { %><a href='/serviceDashboard' class="btn">Back</a><% } %>
+       
+     </div>
+    <main class="centered">
+        <h2><% if(editing) { %>Edit Your Service<% } else { %>Add Your Service<% } %></h2>
+        <form class="product-form" action="/<% if(editing) { %>edit-service<% } else { %>add-service<% } %>" method="POST" >
+            <div class="my-form-class">
+                <div class="form-control"><label for="service_category">Service Category</label
+                ></div>
+                <div class="row mb-3">
+    <div class="col-sm-10">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="service_category" id="plumber" value="Plumber" <% if (editing && service.service_category === "Plumber") { %>checked<% } %>>
+            <label class="form-check-label white-text" for="plumber">Plumber</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="service_category" id="electrician" value="Electrician" <% if (editing && service.service_category === "Electrician") { %>checked<% } %>>
+            <label class="form-check-label white-text" for="electrician">Electrician</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="service_category" id="carpenter" value="Carpenter" <% if (editing && service.service_category === "Carpenter") { %>checked<% } %>>
+            <label class="form-check-label white-text" for="carpenter">Carpenter</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="service_category" id="cleaning" value="Cleaning" <% if (editing && service.service_category === "Cleaning") { %>checked<% } %>>
+            <label class="form-check-label white-text" for="cleaning">Cleaning</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="service_category" id="AC_Appliance_Repair" value="AC_Appliance_Repair" <% if (editing && service.service_category === "AC_Appliance_Repair") { %>checked<% } %>>
+            <label class="form-check-label white-text" for="AC_Appliance_Repair">AC & Appliance Repair</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="service_category" id="Packers_Movers" value="Packers_Movers" <% if (editing && service.service_category === "Packers_Movers") { %>checked<% } %>>
+            <label class="form-check-label white-text" for="Packers_Movers">Packers & Movers</label>
+        </div>
+    </div>
+</div>
+         
+                <div class="form-control">
+                    <label for="service">Service</label>
+                    <input type="text" name="service" id="service" value="<% if (editing) { %><%= service.service %><% } %>">
+                </div>
+                 <div class="form-control">
+                <label for="imageUrl">Image URL</label>
+                <input type="text" name="imageUrl" id="imageUrl" value="<% if (editing) { %><%= service.image_url %><% } %>">
+            </div>
+                 <div class="form-control">
+                <label for="description">Description</label>
+                <textarea name="description" id="description" rows="3"><% if (editing) { %><%= service.description %><% } %></textarea>
+            </div>
+               <div class="form-control">
+                    <label for="price">Price</label>
+                    <input type="number" name="price" id="price" value="<% if (editing) { %><%= service.price %><% } %>">
+                </div>
+            </div>
+
+            <% if (editing) { %>
+                <input type="hidden" value="<%= service.id %>" name="serviceId">
+            <% } %>
+
+            <button class="card__actions button" type="submit"><% if (editing) { %>Update Service<% } else { %>Add Service<% } %></button>
+        </form>
+    </main>
+<%- include('../includes/end.ejs') %>

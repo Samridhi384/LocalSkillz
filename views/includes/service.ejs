@@ -1,0 +1,20 @@
+<% if(services.length > 0) { %>
+<div class="grid">
+  <% for(let service of services) { %>
+  <article class="card product-item">
+    <header class="card__header">
+      <% console.log(service.dataValues.service); %>
+      <h1 class="product__title"><%= service.dataValues.service %></h1>
+    </header>
+    <div class="card__image">
+      <img
+        src="https://img.icons8.com/?size=80&id=cLvBnUjoKuXa&format=png"
+        alt="<%= service.dataValues.service %>"
+      />
+    </div>
+  </article>
+  <% } %>
+</div>
+<% } else { %>
+<h1>No Services Found</h1>
+<% } %>

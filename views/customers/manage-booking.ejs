@@ -1,0 +1,169 @@
+<%- include('../includes/head.ejs') %> <%- include('../includes/user.ejs') %>
+<main class="centered">
+  <h1>Manage Booking Cart</h1>
+  <% if (services.length > 0) { %> <% let totalQuantityPrice = 0 %>
+  <div class="grid">
+    <div class="table-responsive">
+      <table class="table table-secondary table-striped table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Service</th>
+            <th scope="col">Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Total</th>
+            <th scope="col">Action</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% const serviceMap = {}; %> <% services.forEach((service, index) =>
+          {%> <% const serviceId = service.dataValues.id; %> <%
+          if(!serviceMap[serviceId]) { %> <% serviceMap[serviceId] = {
+          service,quantity: 1 }; %> <% } else { %> <%
+          serviceMap[serviceId].quantity++; %> <% } %> <% }) %> <%
+          Object.values(serviceMap).forEach((item, index)=> { %>
+          <tr id="row_<%= index %>">
+            <td><%= item.service.dataValues.service %></td>
+            <td>
+              ₹<span id="price_<%= index %>"
+                ><%= item.service.dataValues.price %></span
+              >
+            </td>
+            <td>
+              <div class="card__actions">
+                <button onclick='updateQuantity("<%= index %>" , "decrement")'>
+                  -
+                </button>
+
+                <span id="quantity_<%= index %>"><%= item.quantity %></span>
+                <button onclick="updateQuantity('<%= index %>', 'increment')">
+                  +
+                </button>
+              </div>
+            </td>
+            <td>
+              ₹<span id="total_<%= index %>"
+                ><%= item.service.dataValues.price * item.quantity %></span
+              >
+            </td>
+            <td>
+              <!-- <%= console.log(item.quantity) %> -->
+              <div class="card__actions">
+                <a
+                  href="#"
+                  class="btn btn-primary"
+                  onclick="openModal('<%= item.service.dataValues.price * item.quantity %>','<%= item.service.dataValues.id %>')"
+                  >Confirm Booking</a
+                >
+              </div>
+            </td>
+            <td>
+              <div>
+                <a href="/deleteBooking/<%= bookingId %>">
+                  <img
+                    src="https://img.icons8.com/?size=24&id=84049&format=png"
+                    alt="Delete"
+                /></a>
+              </div>
+            </td>
+          </tr>
+          <% totalQuantityPrice += item.service.dataValues.price * item.quantity
+          %> <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <% } else { %>
+  <h1>No Services Found</h1>
+  <% } %>
+</main>
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="myModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Payment Summary</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <!-- Service details will be displayed here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let selectedRowIndex = null;
+  let quantity = 1;
+
+  function updateQuantity(index, action) {
+    const quantityElement = document.getElementById(`quantity_${index}`);
+    quantity = parseInt(quantityElement.textContent);
+
+    if (action === "decrement" && quantity > 1) {
+      quantity--;
+    } else if (action === "increment") {
+      quantity++;
+    }
+    quantityElement.innerText = quantity;
+
+    const priceElement = document.getElementById(`price_${index}`);
+    const price = parseInt(priceElement.textContent);
+
+    const totalElement = document.getElementById(`total_${index}`);
+    totalElement.innerText = price * quantity;
+
+    quantityElement.innerText = quantity;
+    selectedRowIndex = index;
+  }
+
+  function openModal(price, id) {
+    console.log(id);
+    if (quantity === 1) {
+      document.getElementById("modal-body").innerHTML = `
+        <h5><strong>Total:</strong> ₹${price}</h5>
+        <h5><strong>Taxes & Fare ------- </strong> ₹19</h5>
+        <h5><strong>Visitation Fees ------- </strong> ₹50</h5>
+        <h5><strong>Total ------- </strong> ₹${+price + 19 + 50}</h5>
+         <a
+          href="/getPayment/${+price + 19 + 50}?id=${id}"
+
+          class="btn btn-secondary"
+          >Pay Now</a
+        >
+      `;
+    } else {
+      document.getElementById("modal-body").innerHTML = `
+        <h5><strong>Service Cost ------- </strong> ₹${price * quantity}</h5>
+        <h5><strong>Taxes & Fare ------- </strong> ₹19</h5>
+        <h5><strong>Visitation Fees ------- </strong> ₹50</h5>
+        <h5><strong>Total ------- </strong> ₹${price * quantity + 19 + 50}</h5>
+        <a
+          href="/getPayment/${price * quantity + 19 + 50}"
+          class="btn btn-secondary"
+          >Pay Now</a
+        >
+      `;
+    }
+    $("#myModal").modal("show");
+  }
+</script>
+
+<%- include('../includes/end.ejs') %>

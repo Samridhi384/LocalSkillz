@@ -1,0 +1,49 @@
+<%- include('../includes/head.ejs') %> <%- include('../includes/user.ejs') %>
+<link rel="stylesheet" href="/css/category.css" />
+<main>
+  <div class="container">
+    <div class="content">
+      <h3><%= service.service_category %></h3>
+      <p>⭐<%= rating.length %></p>
+      <article class="card product-item">
+        <header class="card__header">
+          <h1><%= service.dataValues.service %></h1>
+        </header>
+        <div class="card__image">
+          <img
+            src="<%= service.dataValues.image_url %>"
+            alt="<%= service.dataValues.service %>"
+          />
+        </div>
+        <div class="card__content">
+          <h3><%= service.dataValues.description %></h3>
+          <h3>₹<%= service.dataValues.price %></h3>
+        </div>
+        <div class="card__actions">
+          <a href="/getCreateBooking/<%= service.dataValues.id %>" class="btn"
+            >Book Now</a
+          >
+        </div>
+      </article>
+    </div>
+
+    <div class="video-class">
+      <video
+        autoplay
+        muted
+        loop
+        width="900"
+        height="680"
+        poster="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0AQMAAADfKmdSAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAANQTFRF9fX1sGmfigAAAB5JREFUeJztwTEBAAAAwqD1T20ND6AAAAAAAAAAfg0c1AABWiieBAAAAABJRU5ErkJggg=="
+        style="aspect-ratio: 1.77778 / 1"
+      >
+        <source
+          src="https://videos.pexels.com/video-files/6195516/6195516-sd_640_360_25fps.mp4"
+          type="video/mp4"
+        />
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </div>
+</main>
+<%- include('../includes/end.ejs') %>

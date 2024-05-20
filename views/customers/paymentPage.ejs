@@ -1,0 +1,62 @@
+<%- include('../includes/head.ejs') %> <%- include('../includes/user.ejs') %>
+
+<link rel="stylesheet" href="/css/auth.css" />
+<link rel="stylesheet" href="/css/forms.css" />
+
+<h1>Payment</h1>
+<main class="centered">
+  <div class="grid">
+    <article class="card product-item">
+      <header class="card__header">
+        <h2 class="product__title"><%= service.service %></h2>
+      </header>
+      <div class="card__image">
+        <img src="<%= service.image_url %>" alt="<%= service.service %>" />
+      </div>
+      <div class="card__content">
+        <% function formatDate(dateString) { const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, '0'); const month =
+        String(date.getMonth() + 1).padStart(2, '0'); const year =
+        date.getFullYear(); return `${day}/${month}/${year}`; } %>
+        <h5 class="product__author" style="color: burlywood">
+          Scheduled on: <%= formatDate(booking.date) %> at <%= booking.time %>
+        </h5>
+        <h6 class="product__author" style="color: burlywood">
+          Amount Paid: ₹<%= booking.amount %>
+        </h6>
+      </div>
+
+      <div class="card__actions">
+        <a
+          href="#"
+          class="btn"
+          style="background-color: azure; font-weight: bold"
+          >Booking Status :- <%= booking.status %></a
+        >
+      </div>
+      <div class="card__actions">
+        <a
+          href="#"
+          class="btn"
+          id="donate-btn"
+          style="background-color: rgb(233, 236, 160); font-weight: bold"
+          >Pay Now</a
+        >
+      </div>
+    </article>
+  </div>
+</main>
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+  var stripe = Stripe(
+    "pk_test_51PGZPnSGcvj8mXTzZukXaybNainicLvmDp8w93BFv38BgpwPgMlolncRthIiZYaKrAHlrAZ24UWBCVMZ1TJAZJUA00bSyEBW4b"
+  );
+  var donateBtn = document.getElementById("donate-btn");
+  donateBtn.addEventListener("click", function () {
+    stripe.redirectToCheckout({
+      sessionId: "<%= sessionId %>",
+    });
+  });
+</script>
+
+<%- include('../includes/end.ejs') %>
