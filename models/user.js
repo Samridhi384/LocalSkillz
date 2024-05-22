@@ -40,6 +40,16 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "serviceProvideId",
         as: "serviceProvide",
       });
+
+      User.hasMany(models.Notification, {
+        foreignKey: "recieverId",
+        as: "reciever",
+      });
+
+      User.hasMany(models.Notification, {
+        foreignKey: "senderId",
+        as: "sender",
+      });
     }
   }
   User.init(

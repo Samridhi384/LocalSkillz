@@ -1,8 +1,8 @@
 {
   "development": {
     "username": "root",
-    "password": "${DBPASSWORD}",
-    "database": "${DBNAME}",
+    "password": "12345",
+    "database": "localSkillz",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },

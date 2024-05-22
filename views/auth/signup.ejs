@@ -78,13 +78,13 @@
     <legend class="col-form-label col-sm-2 pt-0">Role</legend>
     <div class="col-sm-10">
       <div class="form-check">
-        <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1"  value="user" <% if (isEdit && user.role === 'user') { %>checked<% } %> >
+        <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1"  value="user" required <% if (isEdit && user.role === 'user') { %>checked<% } %> >
         <label class="form-check-label" for="gridRadios1">
           Customer
         </label>
       </div>
       <div class="form-check">
-        <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2"  value="service_provider" <% if (isEdit && user.role === 'service_provider') { %>checked<% } %> >
+        <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2"  value="service_provider" required <% if (isEdit && user.role === 'service_provider') { %>checked<% } %> >
         <label class="form-check-label" for="gridRadios2">
           Service Provider
         </label>

@@ -4,9 +4,11 @@ const userModel = require("../models").User;
 const serviceModel = require("../models").Service;
 const paymentModel = require("../models").Payment;
 const ratingModel = require("../models").Rating;
+const notificationModel = require("../models").Notification;
 const path = require("path");
 const pdfkit = require("pdfkit");
 const fs = require("fs");
+const { log } = require("console");
 require("dotenv").config();
 const stripe = require("stripe")(process.env.STRIPE_API_KEY);
 
@@ -139,7 +141,7 @@ exports.getConfirmedBookings = async (req, res) => {
     if (!customer) {
       throw new Error("Customer not found");
     }
-
+    // console.log(customer);
     const bookingArray = customer.customers.filter(
       (booking) =>
         booking.dataValues.status === "Confirmed" ||
@@ -200,6 +202,7 @@ exports.getConfirmedBookings = async (req, res) => {
       {}
     );
 
+    let name;
     const combinedData = bookings.map((booking) => {
       const service = services.find(
         (service) => service.id === booking.serviceId
@@ -212,109 +215,21 @@ exports.getConfirmedBookings = async (req, res) => {
       };
     });
 
-    res.render("customers/trackOrder", {
-      path: "/getConfirmedBooking",
-      pageTitle: "Track Booking",
-      user: req.user,
-      customer: bookingArray,
-      services: combinedData,
-      bookings: combinedData,
-      serviceProviders: combinedData.map((data) => data.customer),
-    });
-  } catch (error) {
-    res.status(500).send();
-    console.log(error);
-  }
-};
-
-exports.getConfirmedBookings = async (req, res) => {
-  try {
-    const customerId = req.user.id;
-
-    const customer = await userModel.findByPk(customerId, {
-      include: [
-        {
-          model: bookingModel,
-          as: "customers",
-        },
-      ],
-    });
-
-    if (!customer) {
-      throw new Error("Customer not found");
-    }
-
-    const bookingArray = customer.customers.filter(
-      (booking) =>
-        booking.dataValues.status === "Confirmed" ||
-        booking.dataValues.status === "Approved" ||
-        booking.dataValues.status === "Started"
-    );
-
-    const bookings = bookingArray.map((booking) => booking.dataValues);
-    // console.log("Booking array", bookings);
-
-    if (bookingArray.length === 0) {
-      return res.render("customers/trackOrder", {
-        path: "/getConfirmedBooking",
-        pageTitle: "Track Booking",
-        user: req.user,
-        customers: [],
-        services: [],
-        booking: null,
-        serviceProvider: null,
-      });
-    }
-
-    const serviceBookedIds = bookingArray.map(
-      (booking) => booking.dataValues.serviceId
-    );
-
-    const servicing = await serviceModel.findAll({
+    const notification = await notificationModel.findOne({
       where: {
-        id: serviceBookedIds,
+        recieverId: req.user.id,
       },
     });
 
-    const services = servicing.map((service) => service.dataValues);
-    // console.log("services array", services);
+    let message;
 
-    if (!services.length) {
-      throw new Error("Services not found");
+    if (!notification) {
+      message = "No New Notification";
+      name = "";
+    } else {
+      message = notification.message;
+      name = `by ${serviceProviders[0].dataValues.name}`;
     }
-
-    // Fetch all service providers related to these services
-    const bookedServiceProviderId = [
-      ...new Set(
-        bookingArray.map((booking) => booking.dataValues.serviceProviderId)
-      ),
-    ];
-
-    const serviceProviders = await userModel.findAll({
-      where: {
-        id: bookedServiceProviderId,
-      },
-    });
-
-    const serviceProviderMap = serviceProviders.reduce(
-      (acc, serviceProvider) => {
-        acc[serviceProvider.id] = serviceProvider.dataValues;
-        return acc;
-      },
-      {}
-    );
-
-    const combinedData = bookings.map((booking) => {
-      const service = services.find(
-        (service) => service.id === booking.serviceId
-      );
-      const serviceProvider = serviceProviderMap[booking.serviceProviderId];
-      return {
-        booking,
-        service,
-        serviceProvider,
-      };
-    });
 
     res.render("customers/trackOrder", {
       path: "/getConfirmedBooking",
@@ -324,6 +239,8 @@ exports.getConfirmedBookings = async (req, res) => {
       services: combinedData,
       bookings: combinedData,
       serviceProviders: combinedData.map((data) => data.customer),
+      message,
+      name,
     });
   } catch (error) {
     res.status(500).send();
@@ -891,7 +808,7 @@ exports.getStatus = async (req, res) => {
     pageTitle: "Change Status",
     path: "/getStatusChange",
     user: req.user,
-    booking,
+    booking: booking.dataValues,
   });
 };
 
@@ -910,6 +827,14 @@ exports.postStatus = async (req, res) => {
     if (validStatuses.includes(gridRadios)) {
       booking.status = gridRadios;
       await booking.save();
+
+      await notificationModel.create({
+        senderId: req.user.id,
+        recieverId: booking.customerId,
+        message: "Booking Status Updated",
+        read: false,
+      });
+
       return res.status(200).redirect("/getServiceProviderBookings");
     } else {
       return res.status(400).send("Invalid status");

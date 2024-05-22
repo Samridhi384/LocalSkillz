@@ -4,7 +4,7 @@
   <div class="container">
     <div class="content">
       <h3><%= service.service_category %></h3>
-      <p>⭐<%= rating.length %></p>
+      <p>⭐<%= rating.length || '4.8K' %></p>
       <article class="card product-item">
         <header class="card__header">
           <h1><%= service.dataValues.service %></h1>

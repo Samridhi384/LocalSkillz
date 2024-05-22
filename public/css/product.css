@@ -65,5 +65,5 @@ h2 {
 }
 
 .mail {
-  height: 30px;
+  height: 30px !important;
 }

@@ -35,12 +35,17 @@
               <h6 class="product__author" style="color: burlywood !important">
                 Customer Name: <%= service.customer.name %>
               </h6>
-              <h6 class="product__author" style="color: burlywood !important">
-                <div class="contact-details">
-                  <img class="mail" src="https://img.icons8.com/?size=60&id=aRZo6233P8ZV&format=png" alt="Contact Details" />
-                  <h6 style="margin-top: -35px; margin-left: 10px;"><%= service.customer.email %></h6>
-                </div>
-              </h6>
+          <h6 class="product__author" style="color: burlywood;">
+  <img
+    class="mail"
+    src="https://img.icons8.com/?size=60&id=aRZo6233P8ZV&format=png"
+    alt="Contact Details"
+   
+  />
+  <%= service.customer.email %>
+</h6>
+
+
               <div class="card__actions">
                 <a href="/getStatusChange/<%= booking.id %>" class="btn" style="background-color: azure; font-weight: bold">
                   Updated Booking Status: <%= booking.status %>

@@ -135,7 +135,7 @@
   }
 
   function openModal(price, id) {
-    console.log(id);
+    // console.log(id);
     if (quantity === 1) {
       document.getElementById("modal-body").innerHTML = `
         <h5><strong>Total:</strong> ₹${price}</h5>
@@ -156,7 +156,7 @@
         <h5><strong>Visitation Fees ------- </strong> ₹50</h5>
         <h5><strong>Total ------- </strong> ₹${price * quantity + 19 + 50}</h5>
         <a
-          href="/getPayment/${price * quantity + 19 + 50}"
+          href="/getPayment/${price * quantity + 19 + 50}?id=${id}"
           class="btn btn-secondary"
           >Pay Now</a
         >
